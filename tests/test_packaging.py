@@ -23,6 +23,8 @@ class PackagingTests(unittest.TestCase):
         self.assertIn('docs/images/eject-preview.png', names)
         self.assertIn('docs/images/eject-cut.png', names)
         self.assertIn('docs/images/eject-parts.png', names)
+        self.assertIn('release/limitations.md', names)
+        self.assertIn('release/limitations.ru.md', names)
         self.assertNotIn('PLAN.md', names)
         self.assertFalse(any(name.startswith('docs/validation/') for name in names))
 

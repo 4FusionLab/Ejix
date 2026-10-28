@@ -13,4 +13,4 @@ python scripts/build.py --kind addin --channel release
 
 Native Fusion checks exercise geometry, previews, Eject Feature creation and editing, recompute, and F3D reopening. The macOS checks cover separate and combined regions, split source bodies, and body/component results. Native Windows Fusion acceptance has not been completed.
 
-Stable release checks use `release/acceptance.json` to tie platform and API evidence to the exact runtime source digest. Autodesk's Custom Feature API remains designated Preview; its distribution status must be resolved before that gate can pass.
+Stable release checks use `release/acceptance.json` to tie platform and API evidence to the exact runtime source digest. The record distinguishes full acceptance from a release with documented limitations; partial and untested checks are not recorded as passed. See [compatibility and validation](../release/limitations.md).

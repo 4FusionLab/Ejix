@@ -48,7 +48,9 @@ The golden overlay shows the volumes to be extracted. The next images show the c
 
 Ejix runs in Autodesk Fusion's Design workspace with **Capture Design History** enabled. Profiles and participating bodies must belong to the same component and occurrence. To Object supports planar faces and construction planes. Cross-component extraction, taper and whole-body subtraction are not supported; a fully enclosed body is skipped when subtraction is enabled.
 
-Eject Feature uses Autodesk's [Custom Feature API](https://help.autodesk.com/cloudhelp/ENU/Fusion-360-API/files/CustomFeatures_UM.htm), which Autodesk currently designates as Preview. Source selections, result type, profile-result mode, and subtraction are fixed when the feature is created. If changing the extent changes which profiles intersect which bodies, recreate the feature. Keep Ejix available when reopening designs that contain an Eject Feature.
+Eject Feature uses Autodesk's [Custom Feature API](https://help.autodesk.com/cloudhelp/ENU/Fusion-360-API/files/CustomFeatures_UM.htm), which Autodesk designates as Preview and advises against using in distributed production programs. Future Fusion changes may affect these features. Source selections, result type, profile-result mode, and subtraction are fixed when the feature is created. If changing the extent changes which profiles intersect which bodies, recreate the feature. Keep Ejix available when reopening designs that contain an Eject Feature.
+
+Native Fusion checks on macOS are partial; full interactive acceptance is not complete. Native Fusion acceptance on Windows has not been performed. The Windows CI job runs tests and packaging without Fusion.
 
 [Full limitations](docs/GUIDE.md#limitations) · [Support](SUPPORT.md)
 

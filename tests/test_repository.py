@@ -23,8 +23,13 @@ class RepositoryTests(unittest.TestCase):
             project.check(tag='v9.9.9')
 
     def test_pending_evidence_blocks_stable_release(self):
-        with self.assertRaisesRegex(ValueError, 'CAD evidence|native CAD acceptance'):
-            project.check(stable=True)
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            record = self.fixture(root)
+            record['cad']['macos']['status'] = 'pending'
+            self.save(root, record)
+            with self.assertRaisesRegex(ValueError, 'native CAD acceptance'):
+                project.check_acceptance(root, VERSION)
 
     def test_link_checker_finds_missing_local_file(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -73,6 +78,30 @@ class RepositoryTests(unittest.TestCase):
             root = Path(temp)
             record = self.fixture(root)
             record['custom_feature_api']['resolution'] = None
+            self.save(root, record)
+            with self.assertRaisesRegex(ValueError, 'Preview API'):
+                project.check_acceptance(root, VERSION)
+
+    def test_explicit_limitations_policy_allows_documented_partial_evidence(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            record = self.fixture(root)
+            record['release_policy'] = 'limitations-accepted'
+            record['cad']['macos']['status'] = 'partial'
+            record['cad']['windows'].update(status='not-tested', fusion=None, os=None)
+            record['custom_feature_api']['resolution'] = 'preview-risk-accepted'
+            self.save(root, record)
+            project.check_acceptance(root, VERSION)
+            del record['release_policy']
+            self.save(root, record)
+            with self.assertRaisesRegex(ValueError, 'native CAD acceptance'):
+                project.check_acceptance(root, VERSION)
+
+    def test_preview_risk_requires_explicit_limitations_policy(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            record = self.fixture(root)
+            record['custom_feature_api']['resolution'] = 'preview-risk-accepted'
             self.save(root, record)
             with self.assertRaisesRegex(ValueError, 'Preview API'):
                 project.check_acceptance(root, VERSION)

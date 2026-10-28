@@ -2,22 +2,23 @@
   "schema": 1,
   "version": "1.0.0",
   "source_sha256": "90843a8c3326d8aed1096618c0575b76e423812ce055073a37ce17426908049b",
+  "release_policy": "limitations-accepted",
   "cad": {
     "macos": {
       "status": "partial",
       "fusion": "2706.1.14",
       "os": "macOS 27.0.1",
-      "report": null
+      "report": "release/limitations.md"
     },
     "windows": {
-      "status": "pending",
+      "status": "not-tested",
       "fusion": null,
       "os": null,
-      "report": null
+      "report": "release/limitations.md"
     }
   },
   "custom_feature_api": {
-    "resolution": null,
-    "report": null
+    "resolution": "preview-risk-accepted",
+    "report": "release/limitations.md"
   }
 }

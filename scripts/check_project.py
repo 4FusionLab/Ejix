@@ -84,16 +84,26 @@ def check_acceptance(root, version):
         raise ValueError('Stable release requires matching acceptance metadata.')
     if record.get('source_sha256') != source_digest(root):
         raise ValueError('Stable release requires CAD evidence for the current runtime source digest.')
+    policy = record.get('release_policy', 'full-acceptance')
+    if policy not in ('full-acceptance', 'limitations-accepted'):
+        raise ValueError('Unknown stable release evidence policy.')
+    limitations_accepted = policy == 'limitations-accepted'
     for platform in ('macos', 'windows'):
         evidence = record.get('cad', {}).get(platform, {})
-        if evidence.get('status') != 'passed' or not evidence.get('fusion') or not evidence.get('os'):
+        status = evidence.get('status')
+        if status != 'passed' and not (limitations_accepted and status in ('partial', 'not-tested')):
             raise ValueError('Stable release requires native CAD acceptance: ' + platform)
+        if status in ('passed', 'partial') and (not evidence.get('fusion') or not evidence.get('os')):
+            raise ValueError('Stable release requires native CAD environment details: ' + platform)
         report = evidence.get('report')
         path = (root / report).resolve() if isinstance(report, str) and report else None
         if not path or not path.is_relative_to(root) or not path.is_file() or not path.read_text(encoding='utf-8').strip():
             raise ValueError('Missing CAD evidence report: ' + platform)
     api = record.get('custom_feature_api', {})
-    if api.get('resolution') not in ('preview-api-removed', 'api-released-by-autodesk'):
+    accepted = ('preview-api-removed', 'api-released-by-autodesk')
+    if limitations_accepted:
+        accepted += ('preview-risk-accepted',)
+    if api.get('resolution') not in accepted:
         raise ValueError('Resolve Custom Feature Preview API before stable release.')
     report = api.get('report')
     path = (root / report).resolve() if isinstance(report, str) and report else None

@@ -16,7 +16,7 @@ def source_files(root):
     for directory, patterns in {
         'Ejix': ('*.py', '*.manifest', '*.png', '*.svg'), 'scripts': ('*.py',),
         'tests': ('*.py',), 'docs': ('*.md', '*.svg', '*.png'), '.github': ('*.yml', '*.md'),
-        'release': ('*.json',),
+        'release': ('*.json', '*.md'),
     }.items():
         for pattern in patterns:
             paths.update((root / directory).rglob(pattern))
