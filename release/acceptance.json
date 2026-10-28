@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "version": "1.0.0",
+  "source_sha256": "90843a8c3326d8aed1096618c0575b76e423812ce055073a37ce17426908049b",
+  "cad": {
+    "macos": {
+      "status": "partial",
+      "fusion": "2706.1.14",
+      "os": "macOS 27.0.1",
+      "report": null
+    },
+    "windows": {
+      "status": "pending",
+      "fusion": null,
+      "os": null,
+      "report": null
+    }
+  },
+  "custom_feature_api": {
+    "resolution": null,
+    "report": null
+  }
+}

@@ -1,0 +1,88 @@
+name: Publish release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version tag matching the manifest (for example v1.0.0)'
+        required: true
+        type: string
+      channel:
+        description: 'Release channel; stable requires completed CAD and API evidence'
+        required: true
+        default: stable
+        type: choice
+        options: [prerelease, stable]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ejix-release
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  release:
+    needs: validate
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ inputs.tag }}
+      RELEASE_CHANNEL: ${{ inputs.channel }}
+      GH_REPO: ${{ github.repository }}
+      RELEASE_COMMIT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Validate release and build assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          flags=()
+          package_channel=prerelease
+          if [[ "$RELEASE_CHANNEL" == stable ]]; then
+            flags+=(--stable)
+            package_channel=release
+          fi
+          python scripts/check_project.py --tag "$RELEASE_TAG" "${flags[@]}"
+          if git show-ref --verify --quiet "refs/tags/$RELEASE_TAG"; then
+            tag_commit="$(git rev-parse "$RELEASE_TAG^{commit}")"
+            if [[ "$tag_commit" != "$RELEASE_COMMIT" ]]; then
+              echo 'Existing tag points to a different commit.' >&2
+              exit 1
+            fi
+          fi
+          python scripts/build.py --kind source --channel "$package_channel"
+          python scripts/build.py --kind addin --channel "$package_channel"
+      - name: Publish release with English and Russian notes
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          prerelease=()
+          if [[ "$RELEASE_CHANNEL" == prerelease ]]; then
+            prerelease+=(--prerelease --latest=false)
+          else
+            prerelease+=(--latest)
+          fi
+          version="${RELEASE_TAG#v}"
+          gh release create "$RELEASE_TAG" dist/* "docs/releases/$version.ru.md" \
+            --target "$RELEASE_COMMIT" \
+            --title "Ejix $RELEASE_TAG" \
+            --notes-file "docs/releases/$version.md" \
+            "${prerelease[@]}"

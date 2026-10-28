@@ -1,0 +1,24 @@
+name: Feature request
+description: Propose an improvement around a concrete modeling task.
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: "English or Russian is welcome. Describe the modeling goal before proposing controls."
+  - type: textarea
+    id: task
+    attributes:
+      label: Modeling task and current workaround
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Desired behavior
+      description: Include how this should work with multiple bodies, components and design history.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and examples

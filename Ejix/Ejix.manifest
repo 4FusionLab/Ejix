@@ -1,0 +1,10 @@
+{
+  "autodeskProduct": "Fusion360",
+  "type": "addin",
+  "id": "fac00b1c-fdc8-4ad8-b731-eccf1641ca8c",
+  "author": "4FusionLab",
+  "description": {"": "Ejix extracts the volume defined by a profile or face into a body or component."},
+  "version": "1.0.0",
+  "runOnStartup": false,
+  "supportedOS": "windows|mac"
+}

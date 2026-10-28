@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-labelledby="title desc">
+  <title id="title">Ejix by 4FusionLab</title>
+  <desc id="desc">Extract volumes. Keep control. A schematic shows an orange volume separated from a gray body.</desc>
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#141d2a"/><stop offset="1" stop-color="#223345"/></linearGradient><pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0V36" fill="none" stroke="#33485c" stroke-width="0.6"/></pattern></defs>
+  <rect width="1280" height="360" rx="20" fill="url(#bg)"/><rect x="690" width="590" height="360" rx="20" fill="url(#grid)" opacity="0.55"/>
+  <text x="64" y="69" font-family="Arial,sans-serif" font-size="17" letter-spacing="4" fill="#e99638">4FUSIONLAB</text>
+  <text x="58" y="181" font-family="Arial,sans-serif" font-weight="700" font-size="104" fill="#f3f6fa">Ejix<tspan fill="#e99638">.</tspan></text>
+  <text x="64" y="233" font-family="Arial,sans-serif" font-size="28" fill="#c9d5e1">Extract volumes. Keep control.</text>
+  <text x="65" y="300" font-family="Arial,sans-serif" font-size="16" fill="#8fa3b6">AUTODESK FUSION ADD-IN</text>
+  <g stroke="#293d50" stroke-width="2" stroke-linejoin="round">
+    <path d="m789 183 124-67 130 70-126 70Z" fill="#6d8296"/><path d="m789 183 128 73v64l-128-74Z" fill="#475e73"/><path d="m917 256 126-70v64l-126 70Z" fill="#536c82"/>
+    <path d="m868 181 43-23 47 26-44 24Z" fill="#172635"/><path d="m868 181 46 27v40l-46-27Z" fill="#30485b"/><path d="m914 208 44-24v40l-44 24Z" fill="#1b3041"/>
+  </g>
+  <path d="M917 147v-43" stroke="#e99638" stroke-width="3" stroke-dasharray="5 6"/><path d="m908 113 9-12 9 12" fill="none" stroke="#e99638" stroke-width="3"/>
+  <g stroke="#f6b35a" stroke-width="2" stroke-linejoin="round"><path d="m868 64 43-23 47 26-44 24Z" fill="#ffc475"/><path d="m868 64 46 27v40l-46-27Z" fill="#df8531"/><path d="m914 91 44-24v40l-44 24Z" fill="#eea044"/></g>
+  <text x="1067" y="211" font-family="Arial,sans-serif" font-size="14" fill="#9db1c3">EJECT</text>
+</svg>

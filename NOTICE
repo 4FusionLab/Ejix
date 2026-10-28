@@ -1,0 +1,14 @@
+Ejix
+Copyright (C) 2026 4FusionLab and contributors.
+SPDX-License-Identifier: GPL-3.0-only
+
+Ejix is an independent Autodesk Fusion add-in by 4FusionLab.
+The project follows engineering conventions developed for Perfora and Selectra.
+The project icon was supplied by 4FusionLab for use in the repository and add-in.
+Interface PNG sizes are derived from that icon. The legacy banner is an original
+project asset. These assets are not Autodesk resources.
+Autodesk and Fusion are trademarks of their respective owners.
+No Autodesk endorsement or affiliation is implied.
+
+The exact temporary extrusion helper and native UI resource resolver are adapted
+from Perfora by 4FusionLab, under GPL-3.0-only.

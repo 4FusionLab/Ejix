@@ -1,0 +1,39 @@
+name: Bug report
+description: Report incorrect geometry, preview, history or installation behavior.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: "English or Russian is welcome. Share only models and logs you may publish. Report vulnerabilities using SECURITY.md."
+  - type: input
+    id: ejix-version
+    attributes:
+      label: Ejix version or commit
+      placeholder: "Ejix version or source commit"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Full Fusion version and OS
+      description: Include OS version, history mode, and whether the model uses component occurrences.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps and settings
+      description: Include Profiles, Objects, direction, extent, offset, timeline, result and subtraction settings.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual result
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Model, screenshots and logs
+      description: Attach a minimal shareable model or explain how to build it. Remove confidential data.

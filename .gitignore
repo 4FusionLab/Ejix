@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.venv/
+dist/
+artifacts/
+/PLAN.md
+/docs/validation/
+/docs/releases/0.1.0.md
+/docs/releases/0.1.0.ru.md
+/docs/assets/*-prompt.txt
+/docs/assets/icon-family-*.png
+/ejix*.png
+/.github/ISSUE_TEMPLATE/03-cad-validation.yml
