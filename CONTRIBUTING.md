@@ -10,11 +10,11 @@ Use the repository's issue chooser. Include the Ejix version or source commit, f
 
 ## Make a change
 
-1. Create a focused branch. Use `codex/` for Codex-created branches and Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `ci:`, `chore:`).
+1. Create a focused branch and use Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `ci:`, `chore:`).
 2. Keep numeric/settings logic independent of `adsk`. Runtime dependencies are the standard library and Fusion API only.
-3. Preserve explicit Objects participation, per-source result identity and extraction of all sources before the first Cut. Never silently expand scope.
+3. Preserve explicit Objects participation, per-source result identity and extraction before cutting the original bodies. Never silently expand scope.
 4. Run the checks below. For UI, geometry, adapter or lifecycle changes, perform the affected [CAD scenarios](docs/VALIDATION.md) when Fusion is available. Use a separate unsaved design and one CAD operator at a time.
-5. Update English and Russian user-facing documentation together, and record behavior changes under Unreleased in both changelogs.
+5. Update English and Russian user-facing documentation and changelogs together.
 6. Open a PR using the template. Describe the resulting behavior, relevant evidence, limitations and checks not performed.
 
 ```sh

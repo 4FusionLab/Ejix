@@ -4,7 +4,7 @@
 
 ## Supported versions
 
-There is no stable release or guaranteed security-support window yet. Report suspected vulnerabilities in the current development version. After the first stable release, this section will identify supported release lines explicitly.
+Please report suspected vulnerabilities affecting the latest version of Ejix. Include the version or commit in the report.
 
 ## Report privately
 
