@@ -12,11 +12,9 @@
 
 <p align="center"><a href="https://github.com/4FusionLab/Ejix/releases"><strong>Download</strong></a> · <a href="README.ru.md">Русский</a> · <a href="https://github.com/4FusionLab/Ejix/issues/new/choose">Report a problem</a></p>
 
-Ejix is an open-source **Fusion 360 add-in** for extracting solid volumes with sketch profiles or planar faces, creating separate bodies or components with optional subtraction from the source model.
-
 ## Extract the shape you need
 
-Select closed sketch profiles or planar faces and set the extent. Ejix finds intersecting bodies, shows the extracted volume, and creates the result as a body or component. Choose whether to subtract the result from each source.
+Ejix is a **Fusion 360 add-in** for extracting solid volumes from sketch profiles or planar faces into separate bodies or components, with optional subtraction from the source model. Select closed sketch profiles or planar faces and set the extent. Ejix finds intersecting bodies, shows the extracted volume, and creates the result as a body or component. Choose whether to subtract the result from each source.
 
 - **Several profiles:** work with regions on one plane or different planes.
 - **Separate Bodies:** extract regions in selection order; earlier regions keep the overlapping volume.
