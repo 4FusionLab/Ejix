@@ -12,6 +12,8 @@
 
 <p align="center"><a href="https://github.com/4FusionLab/Ejix/releases"><strong>Скачать</strong></a> · <a href="README.md">English</a> · <a href="https://github.com/4FusionLab/Ejix/issues/new/choose">Сообщить о проблеме</a></p>
 
+**Ejix** — аддон **Fusion 360** для извлечения частей твёрдого тела по эскизу или плоской грани с созданием отдельных тел и компонентов и возможностью вычитания из исходной модели.
+
 ## Извлеките нужную форму
 
 Выберите замкнутые профили эскиза или плоские грани и задайте протяжённость. Ejix найдёт пересекаемые тела, покажет извлекаемый объём и создаст результат как тело или компонент. Можно выбрать, вычитать ли результат из каждого исходного тела.
@@ -60,6 +62,6 @@ Eject Feature использует [Custom Feature API](https://help.autodesk.co
 
 ## Семейство 4FusionLab
 
-Ejix извлекает объёмы. [Perfora](https://github.com/4FusionLab/Perfora) создаёт перфорации, а [Selectra](https://github.com/4FusionLab/Selectra) помогает находить похожую геометрию.
+Ejix извлекает объёмы. [Perfora](https://github.com/4FusionLab/Perfora) создаёт перфорации, а [Selectra](https://github.com/4FusionLab/Selectra) помогает находить похожую геометрию. [RuEn](https://github.com/4FusionLab/RuEn) позволяет использовать горячие клавиши при русской раскладке, а [Planara](https://github.com/4FusionLab/Planara) — будущий аддон для развёртки поверхностей.
 
 [GPL-3.0-only](LICENSE). Самостоятельный проект **4FusionLab**, не связанный с Autodesk и не одобренный ею. Autodesk и Fusion — товарные знаки Autodesk, Inc.
