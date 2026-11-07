@@ -19,6 +19,14 @@ This repository follows the organization-wide release contract. The **GitVersion
 6. Avoid opportunistic releases on a routine PR merge. When required release notes or project-specific approval/evidence is absent, skip publication safely rather than inventing notes or issuing an unintended version.
 7. A broken release is corrected by a new patch version. Existing public tags, release notes and downloadable files remain immutable.
 
+## Explicit release trigger (organization-wide)
+
+- A product GitHub Release may start **only** after deliberately pushing an immutable tag `vMAJOR.MINOR.PATCH` (stable) or `vMAJOR.MINOR.PATCH-IDENTIFIER` (prerelease) for a tested commit reachable from `main`. An ordinary branch push, PR merge or `workflow_dispatch` is never a release trigger.
+- GitVersion.Tool **6.8.2** resolves the numeric `MajorMinorPatch`; the release tag must agree. Fusion manifests and ZIP filenames carry the numeric version only; the prerelease suffix is GitHub metadata.
+- The tag workflow must pass the repository's existing automated tests, package/manifest checks, SHA-256 and reviewed release-note gates; retain any native CAD acceptance, platform limitations and project-specific controls. A failed explicit release attempt must fail closed rather than invent notes or publish unverified assets.
+- Never create or move a version tag implicitly, reuse an existing tag for another commit, overwrite published release assets, or make a prerelease Latest. Retrying a published tag must leave the existing release unchanged.
+- Projects with no approved distribution pipeline **do not publish** on tags. Enabling their releases requires a separate reviewed implementation; GitVersion validation and unrelated deployments are not release publication.
+
 ## Repository-specific publishing gate
 
-Publication remains manual via the `Publish release` workflow with an explicit tag and channel. Stable additionally requires `release/acceptance.json` CAD/API evidence; English and Russian notes are mandatory.
+Only a new version-tag push initiates `Publish release`. Its existing Linux/macOS/Windows CI, source/add-in packaging, bilingual notes, CAD/API acceptance, SHA-256 and stable/prerelease gates remain mandatory.
