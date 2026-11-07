@@ -125,6 +125,10 @@ jobs:
               exit 1
             }
           fi
-          gh release create "$RELEASE_TAG" dist/* \
+          assets=(dist/*)
+          if [[ -s "docs/releases/$RELEASE_VERSION.ru.md" ]]; then
+            assets+=("docs/releases/$RELEASE_VERSION.ru.md")
+          fi
+          gh release create "$RELEASE_TAG" "${assets[@]}" \
             --target "$RELEASE_COMMIT" --title "Ejix $RELEASE_TAG" \
             --notes-file "$RUNNER_TEMP/release-notes.md" "${prerelease[@]}"
