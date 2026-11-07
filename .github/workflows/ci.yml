@@ -51,6 +51,15 @@ jobs:
         run: |
           python scripts/build.py --channel release --version "${{ needs.version.outputs.version }}"
           python scripts/build.py --kind addin --channel release --version "${{ needs.version.outputs.version }}"
+      - name: Verify source and add-in ZIPs (shared contract)
+        uses: 4FusionLab/.github/.github/actions/verify-archive@ad9d60ba4aabc494b4f2c85d6c566a50ca423751
+        with:
+          product: Ejix
+          version: ${{ needs.version.outputs.version }}
+          archives: |
+            dist/Ejix-${{ needs.version.outputs.version }}-source.zip
+            dist/Ejix-${{ needs.version.outputs.version }}.zip
+          manifest: Ejix/Ejix.manifest
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: Ejix-packages-${{ matrix.os }}
