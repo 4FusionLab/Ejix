@@ -8,8 +8,9 @@ permissions:
   contents: read
 
 concurrency:
-  group: ejix-release
+  group: ejix-release-${{ github.ref }}
   cancel-in-progress: false
+  queue: max
 
 jobs:
   changes:
