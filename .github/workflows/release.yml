@@ -57,6 +57,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Calculate version and determine release channel
+        id: release_version
         shell: bash
         run: |
           set -euo pipefail
@@ -73,8 +74,17 @@ jobs:
           echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
           echo "RELEASE_CHANNEL=$channel" >> "$GITHUB_ENV"
           echo "RELEASE_TAG=$tag" >> "$GITHUB_ENV"
-          python scripts/release_notes.py --product Ejix --version "$version" \
-            --output "$RUNNER_TEMP/release-notes.md" --candidate "docs/releases/$version.md"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          suffix=""
+          if [[ "$channel" == prerelease ]]; then suffix="-prerelease"; fi
+          echo "suffix=$suffix" >> "$GITHUB_OUTPUT"
+      - name: Generate release notes (shared platform)
+        uses: 4FusionLab/.github/.github/actions/release-notes@ad9d60ba4aabc494b4f2c85d6c566a50ca423751
+        with:
+          product: Ejix
+          version: ${{ steps.release_version.outputs.version }}
+          candidate: docs/releases/${{ steps.release_version.outputs.version }}.md
+          output: ${{ runner.temp }}/release-notes.md
       - name: Validate release and build assets
         shell: bash
         run: |
@@ -106,6 +116,16 @@ jobs:
             --channel "$RELEASE_CHANNEL" --manifest Ejix/Ejix.manifest \
             --archive "$source_archive" --archive "$addin_archive" \
             --notes "$RUNNER_TEMP/release-notes.md"
+      - name: Verify source and add-in ZIPs (shared platform)
+        uses: 4FusionLab/.github/.github/actions/verify-archive@ad9d60ba4aabc494b4f2c85d6c566a50ca423751
+        with:
+          product: Ejix
+          version: ${{ steps.release_version.outputs.version }}
+          archives: |
+            dist/Ejix-${{ steps.release_version.outputs.version }}-source${{ steps.release_version.outputs.suffix }}.zip
+            dist/Ejix-${{ steps.release_version.outputs.version }}${{ steps.release_version.outputs.suffix }}.zip
+          manifest: Ejix/Ejix.manifest
+          notes: ${{ runner.temp }}/release-notes.md
       - name: Publish immutable release and automatic tag
         shell: bash
         env:
