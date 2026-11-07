@@ -23,12 +23,15 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - run: python scripts/release_changes.py --self-test
-      - name: Detect addon changes
+      - name: Detect runtime changes (shared platform)
         id: impact
-        env:
-          BEFORE: ${{ github.event.before }}
-        run: python scripts/release_changes.py --before "$BEFORE" --after "$GITHUB_SHA" --github-output "$GITHUB_OUTPUT"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: 4FusionLab/.github/.github/actions/runtime-changes@ad9d60ba4aabc494b4f2c85d6c566a50ca423751
+        with:
+          before: ${{ github.event.before }}
+          after: ${{ github.sha }}
+          paths-file: .github/release-paths.txt
+
   validate:
     uses: ./.github/workflows/ci.yml
     permissions:
