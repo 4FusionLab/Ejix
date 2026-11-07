@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-3.0-only
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """Analytical voxel oracle: assert set equality/conservation, not call sequences.
 
 This checks orchestration with multiple solids, cavities and disconnected islands.

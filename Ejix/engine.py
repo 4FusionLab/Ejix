@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-3.0-only
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """API-independent operation coordinator; the backend owns geometry/transactions."""
 from dataclasses import dataclass
 import math

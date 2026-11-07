@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-3.0-only
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """Native Extrude-style controls; graphics-only preview; modeling only on OK."""
 from dataclasses import replace
 from pathlib import Path

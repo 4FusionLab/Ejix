@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-3.0-only
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """Native feature backend. All mutations belong to the Fusion command transaction."""
 import adsk.core
 import adsk.fusion

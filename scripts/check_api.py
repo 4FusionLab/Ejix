@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-3.0-only
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """Read-only AST comparison with Autodesk's installed Python definitions.
 
 This verifies class/static-member names, not runtime geometry or overload behavior.

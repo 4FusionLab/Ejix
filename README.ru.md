@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://github.com/4FusionLab/Ejix/actions/workflows/ci.yml"><img src="https://github.com/4FusionLab/Ejix/actions/workflows/ci.yml/badge.svg" alt="Проверки сборки"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue" alt="Лицензия GPL-3.0"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-PolyForm--Noncommercial-blue" alt="Лицензия PolyForm Noncommercial"></a>
 </p>
 
 <p align="center"><a href="https://github.com/4FusionLab/Ejix/releases"><strong>Скачать</strong></a> · <a href="README.md">English</a> · <a href="https://github.com/4FusionLab/Ejix/issues/new/choose">Сообщить о проблеме</a></p>
@@ -62,4 +62,6 @@ Eject Feature использует [Custom Feature API](https://help.autodesk.co
 
 Ejix извлекает объёмы. [Perfora](https://github.com/4FusionLab/Perfora) создаёт перфорации, а [Selectra](https://github.com/4FusionLab/Selectra) помогает находить похожую геометрию. [RuEn](https://github.com/4FusionLab/RuEn) позволяет использовать горячие клавиши при русской раскладке, а [Planara](https://github.com/4FusionLab/Planara) — будущий аддон для развёртки поверхностей.
 
-[GPL-3.0-only](LICENSE). Самостоятельный проект **4FusionLab**, не связанный с Autodesk и не одобренный ею. Autodesk и Fusion — товарные знаки Autodesk, Inc.
+[PolyForm Noncommercial 1.0.0](LICENSE). Самостоятельный проект **4FusionLab**, не связанный с Autodesk и не одобренный ею. Autodesk и Fusion — товарные знаки Autodesk, Inc.
+
+Коммерческое использование за пределами разрешённых лицензией случаев возможно по отдельной договорённости с 4FusionLab.

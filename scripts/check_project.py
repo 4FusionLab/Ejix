@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-3.0-only
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """Check repository metadata, documentation links and stable-release evidence."""
 import argparse
 import hashlib
@@ -68,7 +68,7 @@ def check(root=ROOT, tag=None, stable=False, version_override=None):
     ):
         raise ValueError('Release tag must match GitVersion: v' + version)
     for path in (root / 'Ejix').glob('*.py'):
-        if not path.read_text(encoding='utf-8').startswith('# SPDX-License-Identifier: GPL-3.0-only'):
+        if not path.read_text(encoding='utf-8').startswith('# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0'):
             raise ValueError('Missing runtime license header: ' + path.name)
     check_links(root)
     if tag:
