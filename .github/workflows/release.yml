@@ -2,7 +2,7 @@ name: Publish release
 
 on:
   push:
-    tags: ['v*']
+    branches: [main]
 
 permissions:
   contents: read
@@ -12,20 +12,35 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  changes:
+    name: Check runtime changes
+    runs-on: ubuntu-latest
+    outputs:
+      release: ${{ steps.impact.outputs.release }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - run: python scripts/release_changes.py --self-test
+      - name: Detect addon changes
+        id: impact
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: python scripts/release_changes.py --before "$BEFORE" --after "$GITHUB_SHA" --github-output "$GITHUB_OUTPUT"
   validate:
     uses: ./.github/workflows/ci.yml
     permissions:
       contents: read
 
   release:
-    needs: validate
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [validate, changes]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changes.outputs.release == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
     env:
-      RELEASE_TAG: ${{ github.ref_name }}
       GH_REPO: ${{ github.repository }}
       RELEASE_COMMIT: ${{ github.sha }}
     steps:
@@ -37,25 +52,25 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.12'
-      - name: Calculate version from GitVersion
+      - name: Calculate version and determine release channel
         shell: bash
         run: |
           set -euo pipefail
           dotnet tool install GitVersion.Tool --tool-path "$RUNNER_TEMP/gitversion" --version 6.8.2
           version="$("$RUNNER_TEMP/gitversion/dotnet-gitversion" /showvariable MajorMinorPatch)"
           [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
-          [[ "$RELEASE_TAG" =~ ^v${version}(-[0-9A-Za-z]+([.-][0-9A-Za-z]+)*)?$ ]] || {
-            echo "Tag does not match GitVersion MajorMinorPatch: $version" >&2
-            exit 1
-          }
-          git merge-base --is-ancestor "$RELEASE_COMMIT" origin/main || {
-            echo "Release tag must point to a commit reachable from main." >&2
-            exit 1
-          }
           channel=stable
-          if [[ "$RELEASE_TAG" != "v$version" ]]; then channel=prerelease; fi
+          tag="v$version"
+          # Never claim stable CAD acceptance for a changed runtime digest.
+          if ! python scripts/check_project.py --version "$version" --stable >/dev/null 2>&1; then
+            channel=prerelease
+            tag="v$version-beta.$GITHUB_RUN_NUMBER"
+          fi
           echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
           echo "RELEASE_CHANNEL=$channel" >> "$GITHUB_ENV"
+          echo "RELEASE_TAG=$tag" >> "$GITHUB_ENV"
+          python scripts/release_notes.py --product Ejix --version "$version" \
+            --output "$RUNNER_TEMP/release-notes.md" --candidate "docs/releases/$version.md"
       - name: Validate release and build assets
         shell: bash
         run: |
@@ -66,7 +81,7 @@ jobs:
             flags+=(--stable)
             package_channel=release
           fi
-          python scripts/check_project.py --tag "$RELEASE_TAG" --version "$RELEASE_VERSION" "${flags[@]}"
+          python scripts/check_project.py --version "$RELEASE_VERSION" "${flags[@]}"
           if git show-ref --verify --quiet "refs/tags/$RELEASE_TAG"; then
             tag_commit="$(git rev-parse "$RELEASE_TAG^{commit}")"
             if [[ "$tag_commit" != "$RELEASE_COMMIT" ]]; then
@@ -86,8 +101,8 @@ jobs:
           python scripts/release_contract.py --version "$RELEASE_VERSION" --tag "$RELEASE_TAG" \
             --channel "$RELEASE_CHANNEL" --manifest Ejix/Ejix.manifest \
             --archive "$source_archive" --archive "$addin_archive" \
-            --notes "docs/releases/$RELEASE_VERSION.md"
-      - name: Publish release with English and Russian notes
+            --notes "$RUNNER_TEMP/release-notes.md"
+      - name: Publish immutable release and automatic tag
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -100,11 +115,15 @@ jobs:
             prerelease+=(--latest)
           fi
           if gh release view "$RELEASE_TAG" --repo "$GH_REPO" >/dev/null 2>&1; then
-            echo "Published release already exists; leave it untouched: $RELEASE_TAG"
+            echo "Already published: $RELEASE_TAG"
             exit 0
           fi
-          gh release create "$RELEASE_TAG" dist/* "docs/releases/$RELEASE_VERSION.ru.md" \
-            --verify-tag --target "$RELEASE_COMMIT" \
-            --title "Ejix $RELEASE_TAG" \
-            --notes-file "docs/releases/$RELEASE_VERSION.md" \
-            "${prerelease[@]}"
+          if git rev-parse -q --verify "refs/tags/$RELEASE_TAG^{commit}" >/dev/null; then
+            test "$(git rev-parse "$RELEASE_TAG^{commit}")" = "$RELEASE_COMMIT" || {
+              echo "Existing tag belongs to another commit: $RELEASE_TAG" >&2
+              exit 1
+            }
+          fi
+          gh release create "$RELEASE_TAG" dist/* \
+            --target "$RELEASE_COMMIT" --title "Ejix $RELEASE_TAG" \
+            --notes-file "$RUNNER_TEMP/release-notes.md" "${prerelease[@]}"
