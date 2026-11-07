@@ -35,10 +35,10 @@ def source_files(root):
                   key=lambda p: p.relative_to(root).as_posix())
 
 
-def build(root=ROOT, output=None, kind='source', channel='prototype'):
+def build(root=ROOT, output=None, kind='source', channel='prototype', version_override=None):
     root = Path(root).resolve()
     manifest = json.loads((root / 'Ejix/Ejix.manifest').read_text(encoding='utf-8'))
-    version = manifest['version']
+    version = version_override or manifest['version']
     if not re.fullmatch(r'\d+\.\d+\.\d+', version):
         raise ValueError('Manifest version must be MAJOR.MINOR.PATCH.')
     if kind not in ('source', 'addin') or channel not in ('prototype', 'prerelease', 'release'):
@@ -61,6 +61,10 @@ def build(root=ROOT, output=None, kind='source', channel='prototype'):
             info.create_system = 3
             info.external_attr = 0o100644 << 16
             content = path.read_bytes()
+            if version_override and path.relative_to(root).as_posix() == 'Ejix/Ejix.manifest':
+                metadata = json.loads(content.decode('utf-8'))
+                metadata['version'] = version
+                content = (json.dumps(metadata, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
             if path.suffix != '.png':
                 content = content.replace(b'\r\n', b'\n')
             zipped.writestr(info, content)
@@ -74,6 +78,8 @@ if __name__ == '__main__':
     parser.add_argument('--output', type=Path)
     parser.add_argument('--kind', choices=('source', 'addin'), default='source')
     parser.add_argument('--channel', choices=('prototype', 'prerelease', 'release'), default='prototype')
+    parser.add_argument('--version', help='GitVersion MajorMinorPatch for the distributable')
     args = parser.parse_args()
-    for path in build(output=args.output, kind=args.kind, channel=args.channel):
+    for path in build(output=args.output, kind=args.kind, channel=args.channel,
+                      version_override=args.version):
         print(path)
