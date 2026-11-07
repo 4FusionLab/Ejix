@@ -21,15 +21,10 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Calculate GitVersion 6.8.2
+      - name: Resolve GitVersion (shared platform)
         id: gitversion
-        shell: bash
-        run: |
-          set -euo pipefail
-          dotnet tool install GitVersion.Tool --tool-path "$RUNNER_TEMP/gitversion" --version 6.8.2
-          version="$("$RUNNER_TEMP/gitversion/dotnet-gitversion" /showvariable MajorMinorPatch)"
-          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
-          echo "version=$version" >> "$GITHUB_OUTPUT"
+        uses: 4FusionLab/.github/.github/actions/resolve-version@ad9d60ba4aabc494b4f2c85d6c566a50ca423751
+
   offline:
     needs: version
     name: Offline (${{ matrix.os }})
