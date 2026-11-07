@@ -47,7 +47,7 @@ def check_links(root=ROOT):
         raise ValueError('Broken local documentation links:\n' + '\n'.join(errors))
 
 
-def check(root=ROOT, tag=None, stable=False):
+def check(root=ROOT, tag=None, stable=False, version_override=None):
     root = Path(root).resolve()
     required = ['LICENSE', 'NOTICE', '.github/pull_request_template.md', '.github/ISSUE_TEMPLATE/config.yml',
                 '.github/workflows/ci.yml', '.github/workflows/release.yml', '.github/dependabot.yml',
@@ -57,13 +57,16 @@ def check(root=ROOT, tag=None, stable=False):
         if not (root / name).is_file():
             raise ValueError('Missing project file: ' + name)
     manifest = json.loads((root / 'Ejix/Ejix.manifest').read_text(encoding='utf-8'))
-    version = manifest['version']
+    version = version_override or manifest['version']
     if not re.fullmatch(r'\d+\.\d+\.\d+', version):
         raise ValueError('Manifest version must be MAJOR.MINOR.PATCH.')
     if manifest.get('author') != '4FusionLab' or manifest.get('type') != 'addin':
         raise ValueError('Unexpected manifest author or add-in type.')
-    if tag is not None and tag != 'v' + version:
-        raise ValueError('Release tag must match manifest: v' + version)
+    if tag is not None and not (
+        tag == 'v' + version or
+        re.fullmatch(r'v' + re.escape(version) + r'-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*', tag)
+    ):
+        raise ValueError('Release tag must match GitVersion: v' + version)
     for path in (root / 'Ejix').glob('*.py'):
         if not path.read_text(encoding='utf-8').startswith('# SPDX-License-Identifier: GPL-3.0-only'):
             raise ValueError('Missing runtime license header: ' + path.name)
@@ -115,13 +118,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--tag')
     parser.add_argument('--stable', action='store_true')
+    parser.add_argument('--version', help='GitVersion MajorMinorPatch for the candidate')
     parser.add_argument('--print-source-digest', action='store_true')
     args = parser.parse_args()
     if args.print_source_digest:
         print(source_digest())
     else:
         try:
-            version = check(tag=args.tag, stable=args.stable)
+            version = check(tag=args.tag, stable=args.stable, version_override=args.version)
         except ValueError as error:
             parser.exit(1, 'Project check failed: ' + str(error) + '\n')
         print('Project metadata and links OK; version ' + version)
