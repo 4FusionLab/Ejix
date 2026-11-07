@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-3.0-only
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """Exercise production API-boundary code with small recording API doubles.
 
 These are contract checks, not evidence of a running Fusion session.

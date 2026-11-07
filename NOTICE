@@ -1,6 +1,6 @@
 Ejix
 Copyright (C) 2026 4FusionLab and contributors.
-SPDX-License-Identifier: GPL-3.0-only
+SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 
 Ejix is an independent Autodesk Fusion add-in by 4FusionLab.
 The project follows engineering conventions developed for Perfora and Selectra.
@@ -11,4 +11,4 @@ Autodesk and Fusion are trademarks of their respective owners.
 No Autodesk endorsement or affiliation is implied.
 
 The exact temporary extrusion helper and native UI resource resolver are adapted
-from Perfora by 4FusionLab, under GPL-3.0-only.
+from Perfora by 4FusionLab; earlier releases were distributed under GPL-3.0-only.

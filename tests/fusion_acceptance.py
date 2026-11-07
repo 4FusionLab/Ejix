@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-3.0-only
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """Native Fusion fixtures; run explicitly inside Fusion, never during unit tests."""
 from dataclasses import replace
 import adsk.core

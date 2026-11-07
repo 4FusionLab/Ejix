@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-3.0-only
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 """Experimental named Eject feature, grouping a native parametric operation graph.
 
 Native Copy/Intersect/Cut own the geometry and dependency graph. The custom node

@@ -28,6 +28,6 @@ Use Python 3.12+ for offline tooling; the actual runtime is Fusion's bundled Pyt
 
 ## Review and licensing
 
-Keep changes reviewable and preserve work from other contributors. Avoid committing models with confidential data, logs with credentials, caches, generated archives or local installation backups. Contributions are licensed under [GPL-3.0-only](LICENSE). Preserve compatible copyright notices and attribution.
+Keep changes reviewable and preserve work from other contributors. Avoid committing models with confidential data, logs with credentials, caches, generated archives or local installation backups. Contributions are licensed under [PolyForm Noncommercial 1.0.0](LICENSE). Preserve compatible copyright notices and attribution.
 
 Follow the [Code of Conduct](CODE_OF_CONDUCT.md). The [architecture](docs/ARCHITECTURE.md), [UX contract](docs/UX.md) and [release process](docs/PUBLISHING.md) define the current project conventions.

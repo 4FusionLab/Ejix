@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://github.com/4FusionLab/Ejix/actions/workflows/ci.yml"><img src="https://github.com/4FusionLab/Ejix/actions/workflows/ci.yml/badge.svg" alt="Build checks"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue" alt="GPL-3.0 license"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-PolyForm--Noncommercial-blue" alt="PolyForm Noncommercial license"></a>
 </p>
 
 <p align="center"><a href="https://github.com/4FusionLab/Ejix/releases"><strong>Download</strong></a> · <a href="README.ru.md">Русский</a> · <a href="https://github.com/4FusionLab/Ejix/issues/new/choose">Report a problem</a></p>
@@ -62,4 +62,6 @@ Native Fusion checks on macOS are partial; full interactive acceptance is not co
 
 Ejix takes care of extracted volumes. [Perfora](https://github.com/4FusionLab/Perfora) creates perforation patterns, and [Selectra](https://github.com/4FusionLab/Selectra) helps you find matching geometry. For Russian-layout keyboard shortcuts, see [RuEn](https://github.com/4FusionLab/RuEn); [Planara](https://github.com/4FusionLab/Planara) is a planned surface-flattening tool.
 
-[GPL-3.0-only](LICENSE). An independent **4FusionLab** project, not affiliated with or endorsed by Autodesk. Autodesk and Fusion are trademarks of Autodesk, Inc.
+[PolyForm Noncommercial 1.0.0](LICENSE). An independent **4FusionLab** project, not affiliated with or endorsed by Autodesk. Autodesk and Fusion are trademarks of Autodesk, Inc.
+
+Commercial use outside the permitted purposes requires a separate agreement with 4FusionLab.
