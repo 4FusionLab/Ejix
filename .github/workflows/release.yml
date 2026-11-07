@@ -1,18 +1,8 @@
 name: Publish release
 
 on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Version tag matching the manifest (for example v1.0.0)'
-        required: true
-        type: string
-      channel:
-        description: 'Release channel; stable requires completed CAD and API evidence'
-        required: true
-        default: stable
-        type: choice
-        options: [prerelease, stable]
+  push:
+    tags: ['v*']
 
 permissions:
   contents: read
@@ -29,14 +19,13 @@ jobs:
 
   release:
     needs: validate
-    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
     env:
-      RELEASE_TAG: ${{ inputs.tag }}
-      RELEASE_CHANNEL: ${{ inputs.channel }}
+      RELEASE_TAG: ${{ github.ref_name }}
       GH_REPO: ${{ github.repository }}
       RELEASE_COMMIT: ${{ github.sha }}
     steps:
@@ -55,7 +44,18 @@ jobs:
           dotnet tool install GitVersion.Tool --tool-path "$RUNNER_TEMP/gitversion" --version 6.8.2
           version="$("$RUNNER_TEMP/gitversion/dotnet-gitversion" /showvariable MajorMinorPatch)"
           [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          [[ "$RELEASE_TAG" =~ ^v${version}(-[0-9A-Za-z]+([.-][0-9A-Za-z]+)*)?$ ]] || {
+            echo "Tag does not match GitVersion MajorMinorPatch: $version" >&2
+            exit 1
+          }
+          git merge-base --is-ancestor "$RELEASE_COMMIT" origin/main || {
+            echo "Release tag must point to a commit reachable from main." >&2
+            exit 1
+          }
+          channel=stable
+          if [[ "$RELEASE_TAG" != "v$version" ]]; then channel=prerelease; fi
           echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
+          echo "RELEASE_CHANNEL=$channel" >> "$GITHUB_ENV"
       - name: Validate release and build assets
         shell: bash
         run: |
@@ -99,8 +99,12 @@ jobs:
           else
             prerelease+=(--latest)
           fi
+          if gh release view "$RELEASE_TAG" --repo "$GH_REPO" >/dev/null 2>&1; then
+            echo "Published release already exists; leave it untouched: $RELEASE_TAG"
+            exit 0
+          fi
           gh release create "$RELEASE_TAG" dist/* "docs/releases/$RELEASE_VERSION.ru.md" \
-            --target "$RELEASE_COMMIT" \
+            --verify-tag --target "$RELEASE_COMMIT" \
             --title "Ejix $RELEASE_TAG" \
             --notes-file "docs/releases/$RELEASE_VERSION.md" \
             "${prerelease[@]}"
