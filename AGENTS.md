@@ -1,28 +1,30 @@
-# Разработка Ejix
+# Ejix development
 
-Ejix — Fusion add-in для извлечения объёмов по профилям и граням, с параметрическим Eject Feature.
+[Русская версия](AGENTS.ru.md)
 
-## Общие правила 4FusionLab
+Ejix is a Fusion add-in for extracting volumes from profiles and faces, with a parametric Eject Feature.
 
-- Общие стандарты: https://github.com/4FusionLab/.github/blob/main/AGENTS.md; модель совместного CI: https://github.com/4FusionLab/.github/blob/main/RELEASE_PLATFORM.md.
-- Общайся с пользователем и составляй планы на русском; названия команд, код и пользовательский интерфейс Fusion — на английском. Сохраняй независимые README.md и README.ru.md, если это есть в проекте.
-- Перед изменениями изучай текущий код и `git status`; сохраняй несвязанные изменения. Используй Conventional Commits; небольшие PR с тестами предпочтительны, но прямой push в `main` разрешён существующей политикой.
-- Не меняй UUID Fusion manifest, IDs команд, поддержку ОС и структуру дистрибутива без отдельной задачи и миграционного плана. Никаких секретов, личных CAD-файлов, токенов или несанкционированных внешних сервисов в репозитории.
-- Где есть распространяемый runtime, релиз запускает только push/merge в `main`, затронувший `.github/release-paths.txt`. CI проверяет код, GitVersion.Tool 6.8.2 вычисляет версию, GitHub автоматически создаёт тег и Release. **Никогда не создавай или не передвигай релизные теги вручную** и не перезаписывай опубликованные ZIP.
-- README, docs, тесты, настройки CI и `AGENTS.md` сами по себе не должны запускать релиз. Общие Actions подключай по **неизменяемому commit SHA** из `4FusionLab/.github`, не по `@main`.
-- Unit-тесты и проверка ZIP — не то же самое, что живые испытания Autodesk Fusion. Для API/UX фиксируй, что действительно тестировалось и на какой ОС.
+## Shared 4FusionLab rules
 
-## Границы продукта и API
+- Shared standards: https://github.com/4FusionLab/.github/blob/main/AGENTS.md; shared CI model: https://github.com/4FusionLab/.github/blob/main/RELEASE_PLATFORM.md.
+- Communicate with the user and make plans in Russian; use English for Fusion command names, code and UI. Retain separate README.md and README.ru.md where the project has them.
+- Inspect current code and `git status` before changes; preserve unrelated work. Use Conventional Commits; small PRs with tests are preferred, while direct pushes to `main` are allowed by the existing policy.
+- Do not change the Fusion manifest UUID, command IDs, OS support or distribution structure without a separate task and migration plan. Keep secrets, personal CAD files, tokens and unauthorized external services out of the repository.
+- Where shippable runtime exists, release is triggered only by a push/merge to `main` affecting `.github/release-paths.txt`. CI checks code, GitVersion.Tool 6.8.2 determines the version, and GitHub automatically creates the tag and Release. **Never create or move release tags manually**, or overwrite published ZIPs.
+- README, docs, tests, CI settings and `AGENTS.md` must not independently trigger a release. Pin shared Actions to an **immutable commit SHA** from `4FusionLab/.github`, not `@main`.
+- Unit tests and ZIP checks are not live Autodesk Fusion tests. For API/UX changes record what was actually tested and on which OS.
 
-- Источник поведения: `README.md`, `README.ru.md`, `docs/GUIDE.md` и `docs/VALIDATION.md`. Проверяй `Ejix/engine.py` как независимое ядро, `Ejix/fusion_adapter.py` и `Ejix/feature.py` — только в контексте Autodesk Fusion.
-- Поддерживай существующие Extent/Direction, несколько профилей, вычитание исходных тел, Preview и очистку временных объектов при Cancel. Не оставляй изменения модели до подтверждения пользователя.
-- `Custom Feature API` от Autodesk имеет Preview-ограничения; не обещай производственную совместимость без новой нативной проверки. Сохраняй `release/acceptance.json` и `release/limitations.md`; для изменённого runtime без актуальной CAD-приёмки release должен оставаться prerelease.
-- Перед изменением Fusion API сверяй официальные определения Autodesk; не выдумывай методы. Объекты Fusion и event handlers живут ограниченное время; обрабатывай отмену и исчезновение объектов.
+## Product and API boundaries
 
-## Проверка
+- Behavioral sources: `README.md`, `README.ru.md`, `docs/GUIDE.md` and `docs/VALIDATION.md`. Treat `Ejix/engine.py` as the independent kernel; use `Ejix/fusion_adapter.py` and `Ejix/feature.py` only in Autodesk Fusion context.
+- Maintain existing Extent/Direction, multiple profiles, source-body subtraction, Preview and temporary-object cleanup on Cancel. Do not leave model changes before user confirmation.
+- Autodesk's `Custom Feature API` has Preview limitations; do not promise production compatibility without fresh native validation. Preserve `release/acceptance.json` and `release/limitations.md`; a release with changed runtime but no current CAD acceptance must remain a prerelease.
+- Verify official Autodesk definitions before changing Fusion API calls; do not invent methods. Fusion objects and event handlers have limited lifetimes; handle cancellation and disappearing objects.
+
+## Verification
 
 - `python -m unittest discover -s tests -v`
 - `python scripts/check_project.py`
-- `python scripts/build.py --kind addin --channel release --version X.Y.Z` (только локальная проверка пакета, без публикации)
-- Для интерактивных изменений — отдельный несохранённый CAD-документ, без вмешательства в активную модель пользователя; соблюдай `docs/VALIDATION.md`.
-- Сохраняй лицензионные SPDX-заголовки и существующие ограничения по macOS/Windows.
+- `python scripts/build.py --kind addin --channel release --version X.Y.Z` (local package verification only, no publication)
+- For interactive changes use a separate unsaved CAD document without interfering with the active user model; follow `docs/VALIDATION.md`.
+- Preserve SPDX license headers and existing macOS/Windows limitations.
