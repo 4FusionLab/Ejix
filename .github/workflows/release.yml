@@ -48,6 +48,14 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.12'
+      - name: Calculate version from GitVersion
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet tool install GitVersion.Tool --tool-path "$RUNNER_TEMP/gitversion" --version 6.8.2
+          version="$("$RUNNER_TEMP/gitversion/dotnet-gitversion" /showvariable MajorMinorPatch)"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
       - name: Validate release and build assets
         shell: bash
         run: |
@@ -58,7 +66,7 @@ jobs:
             flags+=(--stable)
             package_channel=release
           fi
-          python scripts/check_project.py --tag "$RELEASE_TAG" "${flags[@]}"
+          python scripts/check_project.py --tag "$RELEASE_TAG" --version "$RELEASE_VERSION" "${flags[@]}"
           if git show-ref --verify --quiet "refs/tags/$RELEASE_TAG"; then
             tag_commit="$(git rev-parse "$RELEASE_TAG^{commit}")"
             if [[ "$tag_commit" != "$RELEASE_COMMIT" ]]; then
@@ -66,8 +74,19 @@ jobs:
               exit 1
             fi
           fi
-          python scripts/build.py --kind source --channel "$package_channel"
-          python scripts/build.py --kind addin --channel "$package_channel"
+          python scripts/build.py --kind source --channel "$package_channel" --version "$RELEASE_VERSION"
+          python scripts/build.py --kind addin --channel "$package_channel" --version "$RELEASE_VERSION"
+          if [[ "$package_channel" == release ]]; then
+            source_archive="dist/Ejix-$RELEASE_VERSION-source.zip"
+            addin_archive="dist/Ejix-$RELEASE_VERSION.zip"
+          else
+            source_archive="dist/Ejix-$RELEASE_VERSION-source-prerelease.zip"
+            addin_archive="dist/Ejix-$RELEASE_VERSION-prerelease.zip"
+          fi
+          python scripts/release_contract.py --version "$RELEASE_VERSION" --tag "$RELEASE_TAG" \
+            --channel "$RELEASE_CHANNEL" --manifest Ejix/Ejix.manifest \
+            --archive "$source_archive" --archive "$addin_archive" \
+            --notes "docs/releases/$RELEASE_VERSION.md"
       - name: Publish release with English and Russian notes
         shell: bash
         env:
@@ -80,9 +99,8 @@ jobs:
           else
             prerelease+=(--latest)
           fi
-          version="${RELEASE_TAG#v}"
-          gh release create "$RELEASE_TAG" dist/* "docs/releases/$version.ru.md" \
+          gh release create "$RELEASE_TAG" dist/* "docs/releases/$RELEASE_VERSION.ru.md" \
             --target "$RELEASE_COMMIT" \
             --title "Ejix $RELEASE_TAG" \
-            --notes-file "docs/releases/$version.md" \
+            --notes-file "docs/releases/$RELEASE_VERSION.md" \
             "${prerelease[@]}"
