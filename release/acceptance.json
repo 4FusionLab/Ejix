@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "version": "1.0.0",
-  "source_sha256": "90843a8c3326d8aed1096618c0575b76e423812ce055073a37ce17426908049b",
+  "version": "1.1.0",
+  "source_sha256": "bfa776402028c4c135669e6f2627432e67c5295f80e2bb6de0b2b0e4a622d2f3",
   "release_policy": "limitations-accepted",
   "cad": {
     "macos": {
       "status": "partial",
-      "fusion": "2706.1.14",
+      "fusion": "2706.1.17",
       "os": "macOS 27.0.1",
       "report": "release/limitations.md"
     },
