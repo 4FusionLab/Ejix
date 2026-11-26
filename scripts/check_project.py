@@ -60,7 +60,7 @@ def check(root=ROOT, tag=None, stable=False, version_override=None):
     version = version_override or manifest['version']
     if not re.fullmatch(r'\d+\.\d+\.\d+', version):
         raise ValueError('Manifest version must be MAJOR.MINOR.PATCH.')
-    if manifest.get('author') != '4FusionLab' or manifest.get('type') != 'addin':
+    if manifest.get('author') != 'Pavel Kuznetsov' or manifest.get('type') != 'addin':
         raise ValueError('Unexpected manifest author or add-in type.')
     if tag is not None and not (
         tag == 'v' + version or

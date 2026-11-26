@@ -42,7 +42,7 @@ class PackagingTests(unittest.TestCase):
                     self.assertIn(path, names)
                 self.assertFalse(any('__pycache__' in name or name.startswith(('.git/', 'dist/')) for name in names))
                 manifest = json.loads(archive.read('Ejix/Ejix.manifest'))
-                self.assertEqual(manifest['author'], '4FusionLab')
+                self.assertEqual(manifest['author'], 'Pavel Kuznetsov')
                 self.assertEqual(manifest['type'], 'addin')
 
     def test_addin_package_keeps_runtime_docs_and_license_without_dev_tools(self):
